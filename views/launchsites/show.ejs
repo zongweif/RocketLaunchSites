@@ -1,0 +1,94 @@
+<% include ../partials/header %>
+
+	<div class="row">
+		<div class="col-md-3">
+			<p class="lead">RocketLaunchSites</p>
+			<!-- info 1 2 3 -->
+			<div class="list-group">
+				<li class="list-group-item active">info 1</li>
+				<li class="list-group-item">info 2</li>
+				<li class="list-group-item">info 3</li>
+			</div>
+			<div id="map"></div>
+		</div>
+		<div class="col-md-9">
+			<!-- image and description -->
+			<div class="thumbnail">
+				<img class="img-responsive" src="<%= launchsite.image %>">
+				<div class="caption-full">
+					<h4 class="pull-right">$<%= launchsite.price %>/launch</h4>
+					<h4><a><%= launchsite.name %></a></h4>
+					<p><%= launchsite.description %></p>
+					<a class="btn btn-success" href="<%= launchsite.officialSite %>">official calendar and tickets</a>
+					<p>
+					  <em>Submitted by: <%= launchsite.author.username %>, <%= moment(launchsite.createdAt).fromNow() %></em>
+					</p>
+					<% if(currentUser && launchsite.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+						<a class="btn btn-warning" href="/launchsites/<%= launchsite._id %>/edit">Edit</a>
+						<form class="delete-form" action="/launchsites/<%= launchsite._id %>?_method=DELETE" method="POST">
+							<button class="btn btn-danger">Delete</button>
+						</form>
+					<% } %>
+				</div>
+			</div>
+			<!-- comments -->
+			<div class="well">
+				<div class="text-right">
+					<a class="btn btn-success" href="/launchsites/<%= launchsite._id %>/comments/new">Add New Comment</a>
+				</div>
+				<hr>
+				<% launchsite.comments.forEach(function(comment){ %>
+					<div class="row">
+						<div class="col-md-12">
+							<strong><%= comment.author.username %></strong>
+							<span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
+							<p>
+								<%= comment.text %>
+							</p>
+						<% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+							<a class="btn btn-xs btn-warning" 
+							   href="/launchsites/<%= launchsite._id %>/comments/<%= comment._id %>/edit">
+								Edit
+							</a>
+							<form class="delete-form" 
+								  action="/launchsites/<%= launchsite._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+								<input type="submit" class="btn btn-xs btn-danger" value="Delete">
+							</form>
+						<% } %>
+						</div>
+					</div>
+				<% }); %>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	  function initMap() {
+		var lat = <%= launchsite.lat %>;
+		var lng = <%= launchsite.lng %>;
+		var center = {lat: lat, lng: lng };
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 8,
+			center: center,
+			scrollwheel: false
+		});
+		var contentString = `
+		  <strong><%= launchsite.name %><br />
+		  <%= launchsite.location %></strong>
+		  <p><%= launchsite.description %></p>
+		`
+		var infowindow = new google.maps.InfoWindow({
+		  content: contentString
+		});
+		var marker = new google.maps.Marker({
+			position: center,
+			map: map
+		});
+		marker.addListener('click', function() {
+		  infowindow.open(map, marker);
+		});
+	  }
+	</script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzhXld8o9R4sP0kpa4psBEeLbbPYh_PmM&callback=initMap"></script>
+
+<% include ../partials/footer %>

@@ -1,0 +1,31 @@
+<% include ../partials/header %>
+
+	<!-- jumbotron -->
+	<header class="jumbotron">
+		<div class="container">
+			<h1>Welcome to RocketLaunchSites!</h1>
+			<p>View our hand-picked rocket launch sites from all over the US</p>
+			<p>
+				<a class="btn btn-primary btn-lg" href="/launchsites/new">Add New Launch Site</a>
+			</p>
+		</div>
+	</header>
+	
+	<!-- images and text (content) -->
+	<div class="row text-center" style="display:flex; flex-wrap: wrap;">
+		<% launchsites.forEach(function(launchsite){ %>
+			<div class="col-md-3 col-sm-6">
+				<div class="thumbnail">
+					<img src="<%= launchsite.image %>">
+					<div class="caption">
+						<h4><%= launchsite.name %></h4>
+					</div>
+					<p>
+						<a href="launchsites/<%= launchsite._id %>" class="btn btn-primary">More Info</a>
+					</p>
+				</div>
+			</div>
+		<% }) %>
+	</div>
+
+<% include ../partials/footer %>

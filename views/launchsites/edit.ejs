@@ -1,0 +1,36 @@
+<% include ../partials/header %>
+
+	<div class="row">
+		<h1 style="text-align: center">Edit <%= launchsite.name %></h1>
+		
+		<div style="width: 30%; margin: 25px auto;">
+			<form action="/launchsites/<%= launchsite._id %>?_method=PUT" method="POST">
+				<div class="form-group">
+					<input class="form-control" type="text" name="launchsite[name]" value="<%= launchsite.name %>">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="number" 
+						   name="launchsite[price]" value="<%= launchsite.price %>" min="0.01" step="0.01">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="launchsite[image]" value="<%= launchsite.image %>">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="launchsite[officialSite]" value="<%= launchsite.officialSite %>">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="launchsite[description]" value="<%= launchsite.description %>">
+				</div>
+				<div class="form-group">
+					<label for="location">Location</label>
+					<input class="form-control" type="text" name="location" id="location" value="<%= launchsite.location %>">
+				</div>
+				<div class="form-group">
+					<button class="btn btn-lg btn-primary btn-block">Submit!</button>
+				</div>
+			</form>
+			<a href="/launchsites">Go Back</a>
+		</div>
+	</div>
+
+<% include ../partials/footer %>
